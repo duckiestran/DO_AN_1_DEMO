@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Xoá bài đăng!</title>
+    </head>
+    <body>
+        <h1 style="color:red">XOÁ BÀI ĐĂNG</h1>
+        <form action="{{ url_for('delPostsSuccess') }}" method="get">
+            <input type="text" name="key_id" placeholder="Nhập id bài đăng">
+            <button>Xoá bài đăng</button>
+        </form>
+    </body>
+</html>

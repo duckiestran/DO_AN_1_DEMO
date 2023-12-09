@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cập nhật bài đăng</title>
+    </head>
+    <body>
+        <h1>CẬP NHẬT BÀI ĐĂNG<h1>
+        <form action="{{ url_for('updatePostsSuccess') }}" method="get">
+            <input type="text" name="key_id" placeholder="Nhập id bài đăng">
+            <input type="text" name="title" placeholder="Nhập tiêu đề bài đăng">
+            <input type="text" name="price" placeholder="Nhập giá">
+            <input type="text" name="acreage" placeholder="Nhập diện tích cho thuê">
+            <input type="text" name="location" placeholder="Nhập khu vực">
+            <button>Cập nhật</button>
+        </form>
+    </body>
+</html>

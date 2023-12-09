@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Thêm bài đăng!</title>
+    </head>
+    <body>
+        <h1 style="color:greenyellow">THÊM BÀI ĐĂNG</h1>
+        <form action="{{ url_for('addPostsSuccess') }}" method="get">
+            <input type="text" name="key_id" placeholder="Nhập id bài đăng">
+            <input type="text" name="title" placeholder="Nhập tiêu đề/nội dung">
+            <input type="text" name="price" placeholder="Nhập giá">
+            <input type="text" name="acreage" placeholder="Nhập diện tích cho thuê">
+            <input type="text" name="location" placeholder="Nhập khu vực">
+            <button>Thêm bài đăng</button>
+        </form>
+    </body>
+</html>

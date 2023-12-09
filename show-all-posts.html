@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bài đăng</title>
+    </head>
+    <body>
+      <ul>
+          {% for hostel in hostels %}
+              <li>
+                  <b>hostel.key_id:{{hostel.key_id}}</b> - {{ hostel.title }}, {{ hostel.price }},  {{ hostel.acreage }}, {{ hostel.location }}
+              </li>
+          {% endfor %}
+      </ul>
+    </body>
+</html>
