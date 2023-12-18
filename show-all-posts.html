@@ -1,15 +1,37 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Bài đăng</title>
+        <title>Quản lý bài đăng </title>
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 15px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+        </style>
     </head>
     <body>
-      <ul>
-          {% for hostel in hostels %}
-              <li>
-                  <b>hostel.key_id:{{hostel.key_id}}</b> - {{ hostel.title }}, {{ hostel.price }},  {{ hostel.acreage }}, {{ hostel.location }}
-              </li>
-          {% endfor %}
-      </ul>
+        <table>
+            <tr>
+                <th>Key_id</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Acreage</th>
+                <th>Location</th>
+            </tr>
+            {% for hostel in hostels %}
+                <tr>
+                    <td>{{ hostel.key_id }}</td>
+                    <td>{{ hostel.title }}</td>
+                    <td>{{ hostel.price }}</td>
+                    <td>{{ hostel.acreage }}</td>
+                    <td>{{ hostel.location }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     </body>
 </html>
