@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Xoá người dùng - Quyền Admin!</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            form {
+                margin-top: 20px;
+            }
+            input[type="text"] {
+                width: 300px;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            button {
+                padding: 10px 20px;
+                background-color: red;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+            button:hover {
+                background-color: darkred;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>XOÁ NGƯỜI DÙNG</h1>
+        <form action="{{ url_for('delUserSuccess') }}" method="get">
+            <input type="text" name="number_phone" placeholder="Nhập số điện thoại người dùng">
+            <button type="submit">Xoá người dùng</button>
+        </form>
+    </body>
+</html>
