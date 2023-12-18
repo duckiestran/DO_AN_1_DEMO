@@ -2,40 +2,57 @@ from server2 import *
 
 from flask import Flask, request, render_template,url_for,redirect,request
 
+from flask_sqlalchemy import SQLAlchemy
+
 from sqlalchemy.exc import DataError
 
 from sqlalchemy import Integer, cast
 
 
 
-
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgres@localhost:5432/Information"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:postgre@localhost:5432/Information"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
-db = SQLAlchemy(app)
 db.init_app(app)
+
 
 #____________________________________
 
-#trang đăng nhập
+#Admin /Xong
+@app.route("/admin") 
+def admin():
+    return render_template("admin.html")
+
+@app.route("/admin2") 
+def admin2():
+    return render_template("control.html")
+
+#trang đăng nhập / Xong
 @app.route("/timtro365") 
 def home():
     return render_template("index.html")
  
-#trang đăng ký
+#trang đăng ký /Xong
 @app.route("/signup")
 def signup():
     return render_template("signup.html")
 
-#thông báo đăng ký tài khoản thành công 
+#thông báo đăng ký tài khoản thành công /Xong
 @app.route("/success")
 def timtro():
     return render_template("success.html")
 
-#trang chủ web
+#tìm kiếm nhà trọ theo khu vực người dùng chọn /Xong
+@app.route('/search')  
+def search():
+    hostel = Hostel.query.all()
+    return render_template("search.html", Hostel=hostel)
+
+
+#trang chủ web /Xong
 @app.route("/homepage")
 def homepage():
     return render_template("home.html")
@@ -45,10 +62,6 @@ def homepage():
 def profile():
     return render_template("profile.html")
 
-#tìm người ở ghép
-@app.route("/roommate")
-def roommate():
-    return render_template("roommate.html")
 
 #test
 @app.route("/test")
@@ -58,12 +71,27 @@ def test():
 
 
 
-#tìm kiếm nhà trọ theo khu vực người dùng chọn
-@app.route('/search')  
-def search():
-    hostel = Hostel.query.all()
-    return render_template("search.html", Hostel=hostel)
-
+#______________________________________
+#Tài khoản admin
+@app.route("/login_ad", methods=["GET","POST"]) #GET là yêu cầu dữ liệu từ bên sever thông qua URL của web/POST là gửi dữ liệu từ client lên sever  
+                                              
+def login_ad():
+    try:
+        if request.method == "POST":
+            phone_admin = request.form.get("phone_admin")
+            pass_admin = request.form.get("pass_admin")
+            
+        
+            ad = Admin.query.filter_by(phone_admin=phone_admin).first() #check tài khoản mật khẩu trong database
+            if ad and ad.pass_admin == pass_admin:
+                return redirect(url_for("admin2")) #đăng nhập thành công thì return về trang chủ
+            else:
+                return render_template("admin.html")
+        else:
+            return render_template("admin.html")
+        
+    except DataError:
+        return redirect(url_for("admin")) #nhập chữ vào số điện thoại sẽ return về lại trang đăng nhập
 
 #______________________________________
 #Thông tin đăng ký mới 
@@ -108,30 +136,21 @@ def login():
 #Tìm kiếm nhà trọ theo khu vực
 @app.route("/result", methods=["get"])
 def result():
-    # Nhận thông tin từ form
+
+    # Nhận thông tin từ form bên search.html
     location = request.args.get("location")
     price_range = request.args.get("price")
     acreage_range = request.args.get("acreage")
 
-    print("location")
-    print(location)
-
-    print("price")
-    print(price_range)
-
-    print("acreage")
-    print(acreage_range)
-
     # Xử lý truy vấn
     query = Hostel.query
 
+    #khu vực
     if location:
         search_location = f"%{location}%"
-        print("search_location")
-        print(search_location)
         query = query.filter(Hostel.location.like(search_location))
-    print(query)
     
+    #Giá cả
     if price_range:
         price_range = price_range.replace(",", "").strip()
             
@@ -139,43 +158,31 @@ def result():
             min_price, max_price = map(str, price_range.split("-"))
             query = query.filter(cast(Hostel.price, Integer).between(min_price, max_price))
         else:
-            # Xử lý khi không có dấu "-"
-            min_price, max_price = 0, 0
-
-
-    # Sử dụng cast để chuyển đổi kiểu dữ liệu của cột price
-    query = query.filter(cast(Hostel.price, Integer).between(min_price, max_price))
-    print(query)
-     
-
+            min_price, max_price = 0, 0 # Xử lý khi không có dấu "-"
+    
+    query = query.filter(cast(Hostel.price, Integer).between(min_price, max_price)) # Sử dụng cast để chuyển đổi kiểu dữ liệu của cột
+    
+    #Diện tích
     if acreage_range:
         acreage_range = acreage_range.replace(",", "").strip()
         
         if "-" in acreage_range:
             min_acreage, max_acreage = map(str, acreage_range.split("-"))
             query = query.filter(cast(Hostel.acreage, Integer).between(min_acreage, max_acreage))
-        else:
-            # Xử lý khi không có dấu "-"
+        else:    
             min_acreage, max_acreage = 0, 0
 
-    # Sử dụng cast để chuyển đổi kiểu dữ liệu của cột acreage
     query = query.filter(cast(Hostel.acreage, Integer).between(min_acreage, max_acreage))
-    print(query)
     
+
    # Thực hiện truy vấn
     result_hostels = query.all()
-    print("result_hostels")
-    print(result_hostels)
-    
     return render_template("result.html", hostels=result_hostels)
-    
-    
 
-@app.route("/addPost")
-def addPost():
-    return render_template("add-posts.html")
+#_____________________________________________
+#Phân quyền
 
-
+#Thêm bài viết (?) Cái này k phải phân quyền
 @app.route("/addPostSuccess")
 def addPostSuccess():
     key_id = request.args.get("key_id")
@@ -183,55 +190,63 @@ def addPostSuccess():
     price = request.args.get("price")
     acreage = request.args.get("acreage")
     location = request.args.get("location")
-
-    room = Hostel(title=title, price=price, acreage=acreage, location=location)
+    # Request ra id, tiêu đề, giá cả, diện tích, vị trí khi thêm 1 bài viết
+    room = Hostel(title=title, price=price, acreage=acreage, location=location, key_id=key_id)
     db.session.add(room)
     db.session.commit()
     return render_template("add-posts-success.html")
 
-
+#show ra các thông tin trọ
 @app.route("/showPostsForRent")
 def showPostsForRent():
-    hos = Hostel.query.all()
-    return render_template("show-all-posts.html", hostels=hos)
+    result_hostels = Hostel.query.all()
+    return render_template("show-all-posts.html", hostels=result_hostels)
 
-
+#Xóa bài đăng
 @app.route("/delPosts")
 def delPosts():
     return render_template("del-posts.html")
 
-
+#Thông báo xóa bài đăng thành công
 @app.route("/delPostsSuccess")
 def delPostsSuccess():
     key_id = request.args.get("key_id")
     exists = False
-    exists = Hostel.query.filter_by(key_id=key_id).scalar() is not None
+    exists = Hostel.query.filter_by(key_id=key_id)
     while exists:
         obj = Hostel.query.filter_by(key_id=key_id).first()
         db.session.delete(obj)
         db.session.commit()
         return render_template("del-Posts-success.html")
     else:
-        return render_template('invalidkey_id.html')
+        return render_template("invalidkey_id.html")
+
+# Quản lý người dùng-Chỉ dùng cho Admin 
+@app.route("/userManagement")
+def userManagement():
+    users = SignUp.query.all()
+    return render_template("user-management.html", users=users)
 
 
-@app.route("/updatePosts")
-def updatePosts():
-    return render_template("update-posts.html")
+# Xoá người dùng-Chỉ dùng cho Admin
+def delUser():
+    return render_template("del-users.html")
 
-
-@app.route("/updatePostsSuccess")
-def updatePostsSuccess():
-    key_id = request.args.get("key_id")
-    title = request.args.get("title")
-    price = request.args.get("price")
-    acreage = request.args.get("acreage")
-    location = request.args.get("location")
-
-    exists = Hostel.query.filter_by(key_id=key_id).scalar()
+# Thông báo xoá bài đăng
+@app.route("/delUserSuccess")
+def delUserSuccess():
+    number_phone = request.args.get("number_phone")
+    exists = False
+    exists = SignUp.query.filter_by(number_phone=number_phone)
     while exists:
-        obj_change = Hostel.query.filter_by(key_id=key_id).update(dict(title=title, price=price, acreage=acreage, location=location))
+        user = SignUp.query.filter_by(number_phone=number_phone).first()
+        db.session.delete(user)
         db.session.commit()
-        return render_template("update-posts-success.html")
+        return render_template("del-users-success.html")
     else:
         return render_template("invalidkey_id.html")
+
+
+
+
+
