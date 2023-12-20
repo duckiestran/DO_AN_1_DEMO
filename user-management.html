@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Quản lý bài đăng </title>
+        <title>Quản lý người dùng</title>
         <style>
             table {
                 width: 100%;
@@ -17,19 +17,17 @@
     <body>
         <table>
             <tr>
-                <th>Key_id</th>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Acreage</th>
-                <th>Location</th>
+                <th>Số điện thoại</th>
+                <th>Mật khẩu</th>
+                <th>Tên</th>
+                <th>Ngày sinh</th>
             </tr>
-            {% for hostel in hostels %}
+            {% for user in users %}
                 <tr>
-                    <td>{{ hostel.key_id }}</td>
-                    <td>{{ hostel.title }}</td>
-                    <td>{{ hostel.price }}</td>
-                    <td>{{ hostel.acreage }}</td>
-                    <td>{{ hostel.location }}</td>
+                    <td>{{ user.number_phone }}</td>
+                    <td>{{ user.password }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.birth }}</td>
                 </tr>
             {% endfor %}
         </table>

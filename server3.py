@@ -211,15 +211,24 @@ def delPosts():
 @app.route("/delPostsSuccess")
 def delPostsSuccess():
     key_id = request.args.get("key_id")
-    exists = False
-    exists = Hostel.query.filter_by(key_id=key_id)
-    while exists:
-        obj = Hostel.query.filter_by(key_id=key_id).first()
-        db.session.delete(obj)
-        db.session.commit()
-        return render_template("del-Posts-success.html")
-    else:
-        return render_template("invalidkey_id.html")
+    post = Hostel.query.filter_by(key_id=key_id).first_or_404()
+    db.session.delete(post)
+    db.session.commit()
+    return render_template("del-posts-success.html")
+
+
+#Thông báo xóa bài đăng thành công
+@app.route("/delPostsSuccess")
+def delPostsSuccess():
+    
+    key_id = request.args.get("key_id")
+    post = Hostel.query.filter_by(key_id=key_id).first_or_404()
+
+    db.session.delete(post)
+    db.session.commit()
+
+    return render_template("del-posts-success.html")
+
 
 # Quản lý người dùng-Chỉ dùng cho Admin 
 @app.route("/userManagement")
@@ -229,6 +238,7 @@ def userManagement():
 
 
 # Xoá người dùng-Chỉ dùng cho Admin
+@app.route("/delUser")
 def delUser():
     return render_template("del-users.html")
 
@@ -236,15 +246,10 @@ def delUser():
 @app.route("/delUserSuccess")
 def delUserSuccess():
     number_phone = request.args.get("number_phone")
-    exists = False
-    exists = SignUp.query.filter_by(number_phone=number_phone)
-    while exists:
-        user = SignUp.query.filter_by(number_phone=number_phone).first()
-        db.session.delete(user)
-        db.session.commit()
-        return render_template("del-users-success.html")
-    else:
-        return render_template("invalidkey_id.html")
+    user = SignUp.query.filter_by(number_phone=number_phone).first_or_404()
+    db.session.delete(user)
+    db.session.commit()
+    return render_template("del-users-success.html")
 
 
 

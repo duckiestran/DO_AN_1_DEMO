@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản lý</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,0"/> <!-- liên kết với googleapis để sử dụng icon -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- liên kết css -->
+    
+    <link rel="icon" href="{{url_for('static', filename='timtrotainha.png')}}"> <!--logo web  -->
+
+    
+
+</head>
+
+<body style="background-color:darkslategray">
+
+    
+    <form action="{{url_for('login_ad')}}" method="POST">
+
+        <div class="textbox">
+            <input type="tel" name="phone_admin" required />
+            <label>Số Điện Thoại</label>
+            <span class="material-symbols-outlined"> account_circle </span>
+        </div>
+        <br>
+            
+        <div class="textbox">
+            <input type="password" name="pass_admin" required />
+            <label>Mật Khẩu</label>
+            <span class="material-symbols-outlined"> key </span>
+        </div>
+
+        <br>
+    
+        <button>Đăng Nhập</button>
+      
+      </form>
+      <br>
+
+</body>
+</html>

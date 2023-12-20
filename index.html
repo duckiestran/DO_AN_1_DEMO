@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tìm Trọ 365 </title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,0"/> <!-- liên kết với googleapis để sử dụng icon -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- liên kết css -->
+    
+    <link rel="icon" href="{{url_for('static', filename='timtrotainha.png')}}"> <!--logo web  -->
+
+  </head>
+
+  <body>
+
+    <img class="clouds" src="{{url_for('static', filename='123.png')}}"> <!-- background web -->
+
+    <div class="signup">
+      <h5>Chào Mừng Bạn Đến Với</h5>
+      <h2>Thuê Trọ 365</h2>
+      <h3>Vui Lòng Đăng Nhập Tại Đây!</h3>
+
+  <form action="{{url_for('login')}}" method="POST">
+
+    <div class="textbox">
+        <input type="tel" name="phone" required />
+        <label>Số Điện Thoại</label>
+        <span class="material-symbols-outlined"> account_circle </span>
+    </div>
+    <br>
+        
+    <div class="textbox">
+        <input type="password" name="password" required />
+        <label>Mật Khẩu</label>
+        <span class="material-symbols-outlined"> key </span>
+    </div>
+    <br>
+
+    <button style="color:blue">Đăng Nhập</button>
+  
+  </form>
+  <br>
+  
+    <p>
+      Bạn Chưa Có Tài Khoản ?
+      <a href="signup">Đăng Ký Tại Đây</a>
+    </p>
+   
+
+  </body>
+</html>

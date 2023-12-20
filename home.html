@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Tìm Trọ 365 </title>
+    <link rel="icon" href="{{url_for('static', filename='timtrotainha.png')}}"> <!--logo web  -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles3.css') }}"> <!-- liên kết css -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>      
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  </head>
+
+
+<body>
+
+  <h1>Tìm Trọ 365</h1>
+  <br>
+
+  <!-- Giao diện menu -->
+  <div class="timtro"></div>
+  <button class="timtro1" onclick="toggleMenu()">
+  <i class="fa-solid fa-bars"></i>
+  <i class="fa-solid fa-close"></i>
+  </button>
+
+  <aside>
+  <h3>Chức Năng Chính</h3>
+  <a href="homepage" style="color:white">Trang Chủ</a>
+  <a href="roommate" style="color:white">Tìm Người Ở Ghép</a>
+  <a href="rent" style="color:white">Cho Thuê Nhà</a>
+  
+  <a href="search" style="color:white">Tìm kiếm theo khu vực của bạn</a>
+ 
+  <h3>Các Chức Năng Khác</h3>
+  <a href="profile" style="color:white">Hồ Sơ Tài Khoản</a>
+
+  <!-- Tư vấn hỗ trợ -->
+  <!-- <span id="openChat" style="cursor: pointer; text-decoration: underline; color: blue; padding: 10px;">Tư vấn hỗ trợ</span> -->
+  <a id="openChat" style="color:white">Bot chat hỗ trợ</a>
+
+  <div class="chat-window" id="chatWindow">
+    <div class="header">
+        <span>Chat với Hỗ trợ</span>
+        <button id="minimizeBtn" class="minimize-btn">-</button>
+    </div>
+
+    <div class="messages" id="messagesContainer">
+      <!-- Tin nhắn sẽ được hiển thị ở đây -->
+    </div>
+    <div class="input-container">
+        <input type="text" id="messageInput" placeholder="Nhập tin nhắn của bạn...">
+        <button id="sendBtn">Gửi</button>
+    </div>
+    <div class="suggested-questions" id="suggestedQuestions">
+        <div class="question" data-question="Tại sao tôi không đăng được bài viết cho thuê trọ?">Tại sao tôi không đăng được bài viết cho thuê trọ?</div>
+        <div class="question" data-question="Phòng trọ tôi thuê có phát sinh thêm phí k có trong bài đăng, tôi phải xử lý thế nào?">Phòng trọ tôi thuê có phát sinh thêm phí k có trong bài đăng, tôi phải xử lý thế nào?</div>
+        <div class="question" data-question="Thông tin web cung cấp có uy tín không ?">Thông tin web cung cấp có uy tín không ?</div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='support.js') }}"></script> <!-- liên kết với javascript -->
+
+  <button onclick="window.location.href='timtro365'">Đăng Xuất</button>
+  </aside>
+
+  <script type="text/javascript">
+  const toggleMenu = () => document.body.classList.toggle("open");
+  </script>
+
+
+  <!-- Thanh Menu Chính -->
+  <script>
+    function performSearch() {
+        // Lấy giá trị từ ô nhập liệu tìm kiếm
+        var searchTerm = document.getElementById("search-input").value;
+
+        // Bạn có thể thực hiện các hành động tìm kiếm ở đây, ví dụ: redirect đến trang kết quả
+        // window.location.href = "https://www.example.com/search?q=" + searchTerm;
+
+        // Hoặc hiển thị kết quả trên trang web
+        alert("Đang tìm kiếm với từ khóa: " + searchTerm);
+    }
+
+  </script>
+  <nav>
+    <a class="item">Trang Chủ</a>
+    <div class="item">
+      Khu Vực
+      <div class="dropdown">
+        <div>
+          <a>Quận Bắc Từ Liêm</a>
+          <a>Quận Nam Từ Liêm</a>
+          <a>Quận Tây Hồ</a>
+        </div>
+      </div>
+    </div>
+    <a class="item">Tìm Người Ở Ghép</a>
+    <a class="item">Nhà cho Thuê</a>
+    <div class="underline"></div>
+  </nav>
+
+  <br>
+
+  <!-- Các Product card -->
+
+  <!-- 1 ô product card -->
+  <div class="card-container">
+    <div class="card">
+
+      <!-- Hình ảnh chính -->
+      <div class="img_container">
+        <img src="{{url_for('static', filename='tro1.jpg')}}"/>
+        
+      </div>
+
+      <!-- Thông Tin Phòng Trọ -->
+      <div class="details_container">
+        <p class="montserrat">Hương Đỗ</p>
+        <h2 class="name">Cho Thuê Phòng</h2>
+        <h2 class="name">Địa Chỉ: Ngõ 343 Đội Cấn Đi Vào(ngay gần LOTTE)</h2>
+        <p class="description">
+        Nội Thất: Điều hòa, nóng lạnh, giường,tủ...Để xe Free, camera an ninh 
+        24/24, địa điểm trung tâm nhiều tiện ích
+        Số Điện Thoại: 0943332377
+        </p>
+
+        <!-- Giá Tiền -->
+        <div class="price_container">
+          <h1 class="current_price">1.2tr/ 1 Tháng</h1>
+        </div>
+            <!-- xem thêm thông tin -->
+        <button class="btn">
+          <img src="icon-cart.svg" alt="" />
+          Xem Thêm
+        </button>
+      </div>
+    </div>
+  <!-- Kết Thúc -->
+
+
+  <!-- 1 ô product card -->  
+    <div class="card">
+      <div class="img_container">
+        
+              <!-- Hình ảnh chính -->
+              <img src="{{url_for('static', filename='tro2.jpg')}}"/>" />
+      </div>
+
+      <!-- Thông Tin Phòng Trọ -->
+      <div class="details_container">
+        <p class="montserrat">Văn Mạnh</p>
+        <h2 class="name">Tìm Người Ở Ghép</h2>
+        <h2 class="name">Địa Chỉ: Số 47, Ngõ 273 Cổ Nhuế</h2>
+        <p class="description">
+          Trả tiền theo tháng 
+          Nội Thất: chăn ga gối, bàn ăn, bếp, điều hoà, nóng lạnh, tủ khoá
+          Số Điện Thoại: 0969002500
+        </p>
+                
+        <!-- Giá Tiền -->
+        <div class="price_container">
+          <h1 class="current_price">1.3tr/ 1 Tháng</h1>
+        </div>
+
+          <!-- xem thêm thông tin -->
+        <button class="btn">
+          <img src="icon-cart.svg" alt="" />
+          Xem Thêm
+        </button>
+      </div>
+    </div>
+  <!-- Kết Thúc -->
+  <!-- 1 ô product card --> 
+  <div class="card">
+    <div class="img_container">
+
+       <!-- Hình ảnh chính -->
+       <img src="{{url_for('static', filename='tro3.jpg')}}"/>"
+    </div>
+
+     <!-- Thông Tin Phòng Trọ -->
+    <div class="details_container">
+      <p class="montserrat">Văn Mạnh</p>
+      <h2 class="name">Tìm Người Ở Ghép</h2>
+      <h2 class="name">Địa Chỉ: Số 47, Ngõ 273 Cổ Nhuế</h2>
+      <p class="description">
+        Trả tiền theo tháng 
+        Nội Thất: chăn ga gối, bàn ăn, bếp, điều hoà, nóng lạnh, tủ khoá
+        Số Điện Thoại: 0969002500
+      </p>
+
+        <!-- Giá Tiền -->
+      <div class="price_container">
+        <h1 class="current_price">1.3tr/ 1 Tháng</h1>
+      </div>
+
+        <!-- xem thêm thông tin -->
+      <button class="btn">
+        <img src="icon-cart.jpg" alt="" />
+        Xem Thêm
+      </button>
+    </div>
+  </div>   
+<!-- Kết thúc --> 
+
+  </div>
+  </body>
+
+
+
+

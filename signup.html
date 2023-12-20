@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Thuê Trọ 365 </title>
+
+    <img src="timtrotainha.png">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,0"/>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}">
+
+    <link rel="icon" href="{{url_for('static', filename='timtrotainha.png')}}"> <!--logo web  -->
+    
+  </head>
+
+  <body>
+
+    <img class="clouds" src="{{url_for('static', filename='123.png')}}">
+
+  <div class="signup">
+    <h2>Tìm trọ 365</h2>
+    <h3>Đăng Ký Tài Khoản</h3>
+    
+  <form action="{{url_for('Signup')}}" method="GET"> 
+    <!-- Signup là hàm ở dòng 33 bên server3.py -->
+
+      <div class="textbox">
+        <input type="tel" name="phone" required />
+        <label>Số Điện Thoại</label>
+        <span class="material-symbols-outlined"> &#x260E; </span>
+      </div>
+      <br>
+        
+      <div class="textbox">
+        <input type="password" name="password" required />
+        <label>Mật Khẩu</label>
+        <span class="material-symbols-outlined"> key </span>
+      </div>
+      <br>
+
+
+      <div class="textbox">
+        <input type="text" name="name" required />
+        <label>Họ Và Tên</label>
+        <span class="material-symbols-outlined"> account_circle </span> 
+      </div>
+      <br>
+
+      <div class="textbox">
+        <input type="text" name="birth" required />
+        <label>Ngày - Tháng - Năm Sinh</label>
+        <span class="material-symbols-outlined"> account_circle </span>
+      </div>
+      <br>
+
+      <button style="color:blue" type="submit">Đăng Ký Tài Khoản</button>
+      <br><br>
+      <button><a href="timtro365" style="color:gray; font-size:15px">Quay Lại Đăng Nhập</a></button>
+
+  </form>
+  </div>
+
+  </body>
+</html>

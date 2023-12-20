@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tìm Trọ 365 </title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,0"/>
+
+    <link rel="icon" href="{{url_for('static', filename='timtrotainha.png')}}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <style>
+        #countdown {
+            font-size: 36px; /* Kích thước chữ */
+            font-family: 'Arial', sans-serif; /* Phông chữ */
+            font-weight: bold;
+            text-align: center;
+            margin-top: 50px;
+            color: #fefefe;
+        }
+    </style>
+    <script>
+        // Đặt thời gian cần đếm ngược (đơn vị: miligiây)
+        var countDownDate = new Date().getTime() + 10000; // Đếm ngược từ ngày hiện tại đến 5 giây sau.
+
+        var x = setInterval(function() {
+            // Lấy thời gian hiện tại
+            var now = new Date().getTime();
+
+            // Tính thời gian còn lại
+            var distance = countDownDate - now;
+
+            // Tính toán thời gian còn lại theo giây
+            var seconds = Math.floor(distance / 1000);
+
+            // Hiển thị thời gian còn lại
+            document.getElementById("countdown").innerHTML = seconds + "s";
+
+            // Kiểm tra nếu thời gian kết thúc
+            if (distance < 0) {
+                clearInterval(x); // Dừng đồng hồ đếm ngược khi hết thời gian
+                window.location.href = 'timtro365';
+            }
+        }, 1000); // Cập nhật đồng hồ mỗi giây
+    </script>
+
+  </head>
+  <body>
+    <img class="clouds" src="123.png" />
+
+    <div class="signup">
+
+      <h2>Đăng Ký Thành Công </h2>
+
+      <br>
+      <h4 style="color:#fefefe" >Trang sẽ tự động quay về đăng nhập sau:</h4>
+      <div id="countdown">10s</div>
+      <br>
+
+      <form class="form">
+        
+        <button type="submit">
+        <a href="timtro365" style="color:#fefefe"> Quay Về Đăng Nhập </a>
+        <span class="material-symbols-outlined"> arrow_forward </span>
+        </button>
+        <br>
+
+        <a href="timtro365" style="color:#fefefe"> Quay Về Đăng Nhập </a>
+
+      </form>
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kết Quả Tìm Kiếm</title>
+</head>
+<body>
+
+<h1>Kết Quả Tìm Kiếm</h1>
+{% if hostels %} 
+    <ul>
+        {% for hostel in hostels %}
+            <!-- Hiển thị thông tin của mỗi nhà trọ -->
+            <li><b>Mã số : {{ hostel.key_id }}</b></li>
+            <li><b>Tiêu đề:</b> {{ hostel.title }}</li>
+            <li><b>Giá cả:</b> {{ hostel.price }} VNĐ</li>
+            <li><b>Diện tích:</b> {{ hostel.acreage }} m2</li>
+            <li><b>Địa chỉ:</b> {{ hostel.location }}</li>
+            <br><hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Không có kết quả phù hợp</p>
+{% endif %}
+
+
+
+
+
+</body>
+</html>
