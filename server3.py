@@ -1,3 +1,4 @@
+from psycopg2 import IntegrityError
 from server2 import *
 
 from flask import Flask, request, render_template,url_for,redirect,request
@@ -51,11 +52,11 @@ def search():
     hostel = Hostel.query.all()
     return render_template("search.html", Hostel=hostel)
 
-
 #trang chủ web /Xong
 @app.route("/homepage")
 def homepage():
     return render_template("home.html")
+
 
 #thông tin tài khoản
 @app.route("/profile")
@@ -72,8 +73,8 @@ def test():
 
 
 #______________________________________
-#Tài khoản admin
-@app.route("/login_ad", methods=["GET","POST"]) #GET là yêu cầu dữ liệu từ bên sever thông qua URL của web/POST là gửi dữ liệu từ client lên sever  
+#Tài khoản admin / xong
+@app.route("/login_ad", methods=["GET","POST"])
                                               
 def login_ad():
     try:
@@ -94,23 +95,26 @@ def login_ad():
         return redirect(url_for("admin")) #nhập chữ vào số điện thoại sẽ return về lại trang đăng nhập
 
 #______________________________________
-#Thông tin đăng ký mới 
+#Thông tin đăng ký mới / xong
 @app.route("/Signup")  
-def Signup():   
-    number_phone = request.args.get("phone")
-    password = request.args.get("password")#request về password bên signup
-    name = request.args.get("name")
-    birth = request.args.get("birth")
-        
-        
-    name_signup = SignUp(number_phone=number_phone, password=password,name=name,birth=birth) #pass ở đầu là var bên Create_tableSQL, pass còn lại là var bên này
-    db.session.add(name_signup)  
-    db.session.commit()
+def Signup():
+    try:
+        number_phone = request.args.get("phone")
+        password = request.args.get("password")#request về password bên signup
+        name = request.args.get("name")
+        birth = request.args.get("birth")
+            
+            
+        name_signup = SignUp(number_phone=number_phone, password=password,name=name,birth=birth) #pass ở đầu là var bên Create_tableSQL, pass còn lại là var bên này
+        db.session.add(name_signup)  
+        db.session.commit()
 
-    return render_template("success.html")
+        return render_template("success.html")
+    except IntegrityError:
+        return "Tài khoản đã tồn tại"
 
 #_________________________________________
-#Đăng nhập vào web
+#Đăng nhập vào web / xong
 #check tài khoản mật khẩu để đăng nhập
 @app.route("/login", methods=["GET","POST"]) #GET là yêu cầu dữ liệu từ bên sever thông qua URL của web/POST là gửi dữ liệu từ client lên sever  
                                               
@@ -133,7 +137,7 @@ def login():
 
 
 #_________________________________________
-#Tìm kiếm nhà trọ theo khu vực
+#Tìm kiếm nhà trọ theo khu vực / xong
 @app.route("/result", methods=["get"])
 def result():
 
@@ -179,79 +183,191 @@ def result():
     result_hostels = query.all()
     return render_template("result.html", hostels=result_hostels)
 
-#_____________________________________________
-#Phân quyền
+#___________________________________________________________
+#Tìm kiếm người dùng / xong
+@app.route("/InformationSearch")
+def InformationSearch():
+    name = request.args.get("name")
+    number_phone = request.args.get("number_phone")
 
-#Thêm bài viết (?) Cái này k phải phân quyền
-@app.route("/addPostSuccess")
-def addPostSuccess():
+    #Xử lý truy vấn
+    Search_Users = SignUp.query
+
+    #Tìm kiếm bằng tên or số điện thoại
+    if name:
+        search_name = f"%{name}%"
+        Search_Users = Search_Users.filter(SignUp.name.like(search_name))
+    
+    if number_phone:
+        number_phone_int = int(number_phone) #đổi kiểu dữ liệu number_phone thành số nguyên
+        Search_Users = Search_Users.filter(SignUp.number_phone == number_phone_int)
+
+    search_users = Search_Users.all()
+    return render_template("results_InformationSearch.html", Users=search_users)
+
+#______________________________________________
+# Đăng bài cho thuê nhà 
+
+@app.route("/rent")
+def rent():
+    return render_template("rent.html")
+
+@app.route("/post_success")
+def post_success():
     key_id = request.args.get("key_id")
     title = request.args.get("title")
     price = request.args.get("price")
     acreage = request.args.get("acreage")
     location = request.args.get("location")
-    # Request ra id, tiêu đề, giá cả, diện tích, vị trí khi thêm 1 bài viết
-    room = Hostel(title=title, price=price, acreage=acreage, location=location, key_id=key_id)
-    db.session.add(room)
-    db.session.commit()
-    return render_template("add-posts-success.html")
 
-#show ra các thông tin trọ
+
+    new_posts = Hostel(title=title, price=price, acreage=acreage, location=location,key_id=key_id) 
+    db.session.add(new_posts)  
+    db.session.commit()
+
+    return render_template("post_success.html",new_posts=new_posts)
+
+
+  
+#_____________________________________________
+#Phân quyền Admin
+
+#Quản lý bài đăng / Xong
 @app.route("/showPostsForRent")
 def showPostsForRent():
     result_hostels = Hostel.query.all()
     return render_template("show-all-posts.html", hostels=result_hostels)
 
-#Xóa bài đăng
-@app.route("/delPosts")
-def delPosts():
-    return render_template("del-posts.html")
 
-#Thông báo xóa bài đăng thành công
-@app.route("/delPostsSuccess")
-def delPostsSuccess():
-    key_id = request.args.get("key_id")
-    post = Hostel.query.filter_by(key_id=key_id).first_or_404()
-    db.session.delete(post)
-    db.session.commit()
-    return render_template("del-posts-success.html")
-
-
-#Thông báo xóa bài đăng thành công
+#xóa bài đăng / xong
 @app.route("/delPostsSuccess")
 def delPostsSuccess():
     
     key_id = request.args.get("key_id")
     post = Hostel.query.filter_by(key_id=key_id).first_or_404()
 
+    post = db.session.merge(post) #Sử dụng merge để đính kèm lại đối tượng vào phiên hiện tại trước khi thực hiện xóa.
     db.session.delete(post)
     db.session.commit()
 
     return render_template("del-posts-success.html")
 
 
-# Quản lý người dùng-Chỉ dùng cho Admin 
+#Tìm kiếm bài đăng  / xong
+@app.route("/PostsSearch")
+def PostsSearch():
+    key_id = request.args.get("key_id")
+
+    if key_id:
+        key_id_int = int(key_id)
+        posts_search = Hostel.query.filter(Hostel.key_id == key_id_int).all()
+    else:
+        posts_search = Hostel.query.all()
+
+    return render_template("search_post_id.html", Posts=posts_search)
+
+
+#Quản lý người dùng / xong
 @app.route("/userManagement")
 def userManagement():
     users = SignUp.query.all()
-    return render_template("user-management.html", users=users)
+    return render_template("user_management.html", users=users)
 
 
-# Xoá người dùng-Chỉ dùng cho Admin
-@app.route("/delUser")
-def delUser():
-    return render_template("del-users.html")
-
-# Thông báo xoá bài đăng
+#Xoá thông tin người dùng / xong
 @app.route("/delUserSuccess")
 def delUserSuccess():
-    number_phone = request.args.get("number_phone")
-    user = SignUp.query.filter_by(number_phone=number_phone).first_or_404()
-    db.session.delete(user)
+    try:
+        number_phone = request.args.get("number_phone")
+        user = SignUp.query.filter_by(number_phone=number_phone).first_or_404()
+
+        user = db.session.merge(user)
+        db.session.delete(user)
+        db.session.commit()
+        return render_template("del-users-success.html")
+    except IntegrityError:
+        return "Người dùng không tồn tại"
+
+
+#Update thông tin người dùng / xong
+@app.route("/update_profile", methods=["GET", "POST"])
+def update_profile():
+
+    if request.method == "POST":
+        update = db.session.merge(SignUp.query.get(request.form.get("phone")))
+        update.password = request.form["password"]
+        update.name = request.form["name"]
+        update.birth = request.form["birth"]
+        db.session.commit()
+
+        
+    return render_template("success_update.html",update=update)
+
+
+
+#Tìm người ở ghép
+@app.route('/roomate')  
+def roomate():
+    def_roomate = Roomate.query.all()
+    return render_template("roomate.html", Roomate=def_roomate)
+
+
+#Tìm kiếm nhà trọ theo khu vực 
+@app.route("/result", methods=["get"])
+def result():
+
+    # Nhận thông tin từ form bên search.html
+    location_room = request.args.get("location_room")
+    price_range_room = request.args.get("price_room")
+    acreage_range_room = request.args.get("acreage_room")
+
+    # Xử lý truy vấn
+    query = Roomate.query
+
+    #khu vực
+    if location_room:
+        search_location_room = f"%{location_room}%"
+        query = query.filter(Roomate.location_room.like(search_location_room))
+    
+    #Giá cả
+    if price_range_room:
+        price_range_room = price_range_room.replace(",", "").strip()
+            
+        if "-" in price_range_room:
+            min_price, max_price = map(str, price_range_room.split("-"))
+            query = query.filter(cast(Hostel.price, Integer).between(min_price, max_price))
+        else:
+            min_price, max_price = 0, 0 # Xử lý khi không có dấu "-"
+    
+    query = query.filter(cast(Roomate.price_room, Integer).between(min_price, max_price)) # Sử dụng cast để chuyển đổi kiểu dữ liệu của cột
+    
+    #Diện tích
+    if acreage_range_room:
+        acreage_range_room = acreage_range_room.replace(",", "").strip()
+        
+        if "-" in acreage_range_room:
+            min_acreage, max_acreage = map(str, acreage_range_room.split("-"))
+            query = query.filter(cast(Roomate.acreage_room, Integer).between(min_acreage, max_acreage))
+        else:    
+            min_acreage, max_acreage = 0, 0
+
+    query = query.filter(cast(Roomate.acreage_room, Integer).between(min_acreage, max_acreage))
+    
+
+   # Thực hiện truy vấn
+    result_room = query.all()
+    return render_template("result_room.html", rooms=result_room)
+
+
+#xóa bài đăng / xong
+@app.route("/delPostsRoomateSuccess")
+def delPostsRoomateSuccess():
+    
+    id_room = request.args.get("id_room")
+    post_roomate = Roomate.query.filter_by(id_room=id_room).first_or_404()
+
+    post_roomate = db.session.merge(post_roomate) #Sử dụng merge để đính kèm lại đối tượng vào phiên hiện tại trước khi thực hiện xóa.
+    db.session.delete(post_roomate)
     db.session.commit()
-    return render_template("del-users-success.html")
 
-
-
-
-
+    return render_template("del-posts-success.html")
